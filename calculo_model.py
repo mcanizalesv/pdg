@@ -2,20 +2,19 @@
 import numpy as np
 import math 
 
+eleccion = input('¿Conoces la presión absoluta o manometrica del sistema? (m/a)' )
 
-print("Hola")
-print("Nuevo print")
-
-
-Elección = float(input('¿Conoces la presión absoluta o manometrica del sistema? (m/a)' ))
-
-if Elección == 'm': 
+if eleccion == 'm': 
     Pman = float(input('Ingresa la peresión manométrica en inHg. Nota: Si la presión es de vacío, ingresa con el signo menos'))
     def Pabs(Patm,Pman):
         return Patm + Pman
     Pabsres = Pabs(26.67, Pman)
-    
-    
+    print(Pabsres)
+
+elif eleccion == 'a':
+    Pabsist = float(input('Ingresa la peresión manométrica en inHg. Nota: Si la presión es de vacío, ingresa con el signo menos'))
+    Pabsres = Pabsist
+    print(Pabsres)
     
 n   = int(input('¿Cuantos efectos usará?: '))
 V   = np.zeros((n+1,5))
