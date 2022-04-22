@@ -5,17 +5,18 @@ import math
 eleccion = input('¿Conoces la presión absoluta o manometrica del sistema? (m/a)' )
 
 if eleccion == 'm': 
-    Pman = float(input('Ingresa la peresión manométrica en inHg. Nota: Si la presión es de vacío, ingresa con el signo menos'))
+    Pman = round(float(input('Ingresa la presión manométrica en kPa. Nota: Si la presión es de vacío, ingresa con el signo menos')),2)
     def Pabs(Patm,Pman):
         return Patm + Pman
-    Pabsres = Pabs(26.67, Pman)
+    Pabsres = Pabs(101.325, Pman)
     print(Pabsres)
 
 elif eleccion == 'a':
-    Pabsist = float(input('Ingresa la peresión manométrica en inHg. Nota: Si la presión es de vacío, ingresa con el signo menos'))
+    Pabsist = round(float(input('Ingresa la presión absoluta en kPa')),2)
     Pabsres = Pabsist
     print(Pabsres)
-    
+
+
 n   = int(input('¿Cuantos efectos usará?: '))
 V   = np.zeros((n+1,5))
 L   = np.zeros((n+1,5))
@@ -23,12 +24,14 @@ BPE  = np.zeros((1,n))
 U   = np.zeros((1,n))  
 Q = np.zeros((1,n))     
 
-#Antoine Parameters
-At = 11.6834
-Bt = 3816.44
-Ct = -46.13
+#Parámetros de Antoine rango de temperatura de 0 a 200 °C y presión de kPa
+At = 16.3872
+Bt = 3885.70
+Ct = -230.170
+i=0
 
-#Steam heat capacity coefficients 
+    
+#Capacidad calorífica del vapor
 Av = 3.47
 Bv = 1.45E-3
 Dv = 0.121E5
@@ -40,8 +43,16 @@ L[1,3]    = float(input('Temperatura de alimentación (ºC): '))
 V[1,2]   = float(input('Temperatura de vapor de calentamiento (ºC): '))  
 V[n+1,2]  = float(input('Temperatura de vapor condensado (ºC): '))
 
+Tsatn = ((Bt/(At - np.log(Pabsres)))-Ct)
 
 Tst = 125 # °C Temperatura del vapor saturado
+#Cálculo de diferencia de temperatura
+
+def Tdif(a, b):
+    return a - b 
+DeltaDeltaTneto = Tdif(Tst,Tsatn)
+#Cálculo del BPE
+
 
 #for k in range(1,n):
     
