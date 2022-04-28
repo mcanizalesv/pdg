@@ -55,26 +55,26 @@ for i in range(1,n+1):
     L[i,1] = (L[i-1,0]*L[i-1,1])/L[i,0]
     cal2 = round(2*(L[i,1]*100)/(100 - (L[i,1]*100)),2)
     BPE.append(cal2)
-print(BPE)
+print(BPE) 
 print(L[1,1])
 
 
 #Cálculo de U  
 
 U = []
-for k in range(1,n):
+for k in range(1,n+1):
     stp= (2500 - 1000)/n
     cal= ((2500 - (k-1)*stp))/1000 #kW//°C* m
     U.append((cal))
    
 #Cálculo de diferencia de temperatura
 
-
 Tsatn = ((Bt/(At - np.log(Pabsres))) + Ct)
 
 def Tdif(a, b):                                   
     return a - b 
 DeltaTneto = Tdif(Tst,Tsatn)
+DeltaTdisp = DeltaTneto + np.sum(BPE)
 
 DT = []
 for i in range(1,n):
