@@ -21,7 +21,7 @@ if eleccion == 'm':
 elif eleccion == 'a':
     Pabsist = round(float(input('Ingresa la presión absoluta en kPa')),2)
     Pabsres = Pabsist
-    print(Pabsres)
+
 else: 
     pass
 
@@ -39,23 +39,24 @@ Dv = 0.121E5
 L[0,0]    = float(input('Corriente de alimentación (kg/h): '))         
 L[0,1]    = float(input('Grados brix alimentación (m/m): ')) 
 L[n,1]  = float(input('Grados brix salida (m/m): '))
-L[0,2]    = float(input('Temperatura de alimentación (ºC): '))           
-V[0,1]   = float(input('Temperatura de vapor de calentamiento (ºC): '))  
+L[0,2]    = float(input('Temperatura de alimentación (ºC): '))            
 V[n,1]  = float(input('Temperatura de vapor condensado (ºC): '))
 
 
 #Balance de masa inicial 
 
-L[n,0] = L[0,0]*L[0,1]/(L[n,1])
+L[n,0] = (L[0,0]*L[0,1])/(L[n,1]) #Brix de salida
+print(L[n,0])
 Vt = (L[0,0] - L[n,0])/n
-
+print
 BPE=[]
-for i in range(1,n):
+for i in range(1,n+1):
     L[i,0] = L[i-1,0] - Vt
     L[i,1] = (L[i-1,0]*L[i-1,1])/L[i,0]
-    cal2 = 2*L[i-1,1]/100 - L[i-1,1]
-    BPEres=BPE.append(cal2)
-print(BPEres)
+    cal2 = round(2*(L[i,1]*100)/(100 - (L[i,1]*100)),2)
+    BPE.append(cal2)
+print(BPE)
+print(L[1,1])
 
 
 #Cálculo de U  
