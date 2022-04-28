@@ -76,9 +76,13 @@ def Tdif(a, b):
 DeltaTneto = Tdif(Tst,Tsatn)
 DeltaTdisp = DeltaTneto + np.sum(BPE)
 
+iU = 0
+for i in range(1,n+1):
+    iU = iU + (1/U[i-1])
+
 DT = []
 for i in range(1,n):
-    cal1= (DeltaTneto*(1/U[i])/np.sum(U)) 
+    cal1= (DeltaTdisp*(1/U[i-1])/iU) 
     DT.append((cal1))
     
 
