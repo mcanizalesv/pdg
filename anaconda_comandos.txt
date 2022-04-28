@@ -1,0 +1,8 @@
+Crear environment con anaconda 
+- conda create --name nombre-environment python=3.9
+Para activar el environment se usa el siguiente comando:
+- conda activate ${nombre_environment} 
+Para desactivar el environment se usa:
+- conda deactivate
+Para listar los entornos virtuales
+- conda env list
