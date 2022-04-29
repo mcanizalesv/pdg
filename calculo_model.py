@@ -7,7 +7,6 @@ Tst = float(int(input('Ingresa la temperatura del vapor de calentamiento en °C:
 V   = np.zeros((n+1,5))
 L   = np.zeros((n+1,5))
 #DT  = np.zeros((1,n))  
-U   = [] 
 Q = np.zeros((1,n))   
 
 eleccion = input('¿Conoces la presión absoluta o manométrica del sistema? (m/a): ' )
@@ -40,7 +39,7 @@ L[0,0]    = float(input('Corriente de alimentación (kg/h): '))
 L[0,1]    = float(input('Grados brix alimentación (m/m): ')) 
 L[n,1]  = float(input('Grados brix salida (m/m): '))
 L[0,2]    = float(input('Temperatura de alimentación (ºC): '))            
-V[n,1]  = float(input('Temperatura de vapor condensado (ºC): '))
+#V[n,1]  = float(input('Temperatura de vapor condensado (ºC): '))
 
 
 #Balance de masa inicial 
@@ -75,26 +74,16 @@ def Tdif(a, b):
     return a - b 
 DeltaTneto = Tdif(Tst,Tsatn)
 DeltaTdisp = DeltaTneto + np.sum(BPE)
+print(DeltaTdisp)
 
 iU = 0
-for i in range(1,n+1):
-    iU = iU + (1/U[i-1])
-
 DT = []
 for i in range(1,n):
+    for i in range(1,n+1):
+        iU = iU + (1/U[i-1])
     cal1= (DeltaTdisp*(1/U[i-1])/iU) 
     DT.append((cal1))
     
-
-#Iteraciones
-
-for i in range(1,n):
-    
-    iU = iU + (1/U(i))
-        
-
-
-       
 
 
 #Presión de saturación
@@ -103,7 +92,6 @@ for i in range(1,n+1):
     V[i,4] = 1E2 * math.exp(At - (Bt/((V[i,1])+273+Ct)))
     L[i,4] = 0.8474E-2 * (L[i,1]*100)^0.9895 * math.exp(2.570E-2 * (L[i,1]*100))*4^0.1163
     L[i,2] = V[i,1] + L[i,4]
-
 
     
 
