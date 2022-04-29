@@ -85,38 +85,40 @@ for i in range(1,n+1):
     DT.append((cal1))
 print("El deltaT es ",DT)
 
- 
-  
+#Cálculo de temperaturas de cada efecto
+T1= Tsatn - DT[0]
+calTi = 0
+for i in range(0,n+1):
+    if i == 0:
+        L[i,2]= T1 
+    elif i != 0:
+        L[i,2] = L[i-1,2] + DT[i+1]
 
 
-#Presión de saturación
+#for i in range(1,n+1):
+    #V[i,4] = 1E2 * math.exp(At - (Bt/((V[i,1])+273+Ct)))
+    #L[i,4] = 0.8474E-2 * (L[i,1]*100)^0.9895 * math.exp(2.570E-2 * (L[i,1]*100))*4^0.1163
+    #L[i,2] = V[i,1] + L[i,4]
 
-for i in range(1,n+1):
-    V[i,4] = 1E2 * math.exp(At - (Bt/((V[i,1])+273+Ct)))
-    L[i,4] = 0.8474E-2 * (L[i,1]*100)^0.9895 * math.exp(2.570E-2 * (L[i,1]*100))*4^0.1163
-    L[i,2] = V[i,1] + L[i,4]
-
-    
 
 # Calor latente y entalpía
 
 for i in range(1,n+1):
 
-        L[i+1,3] = (L[i+1,2]*(1549*L[i+1,1]+4176*(1-L[i+1,1]))+(((L[i+1,3])^2)/2)*(1.96*L[i+1,1]-0.0909*(1-L[i+1,1])) +((L[i+1,3]^3)/3)*(-0.00549*L[i+1,1]+0.00547*(1-L[i+1,1])))/1000; # kJ/kg
+    L[i-1,3] = (L[i-1,2]*(1549*L[i-1,1]+4176*(1-L[i-1,1]))+(((L[i-1,2])^2)/2)*(1.96*L[i-1,1]-0.0909*(1-L[i-1,1])) +((L[i-1,3]^3)/3)*(-0.00549*L[i-1,1]+0.00547*(1-L[i-1,1])))/1000; # kJ/kg
 
 #Capacidad calorifica del vapor
 Av = 3.47
 Bv = 1.45E-3
 Dv = 0.121E5
 
-for i in range(2,n+1):
+for i in range(1,n+1):
 
-        V[i+1,2] = 2501.3 + 0.4618 * (Av*(V[i+1,1]) + (Bv/2)*((V[i+1,1]+273)^2-273^2) - Dv*((V[i+1,1]+273)^-1 - 273^-1 )); #kJ/kg
-    
+    V[i,2] = 2501.3 + 0.4618 * (Av*(V[i,1]) + (Bv/2)*((V[i,1]+273)^2-273^2) - Dv*((V[i,1]+273)^-1 - 273^-1 )); #kJ/kg    
 
 # Calor latente para la generación de vapor
 for i in range(1,n+1):
-       V[i+1,3] =  2257 * ((1 - (V[i+1,1]+273)/(647.1))/(1-0.577))^0.38
+    V[i+1,3] =  2257 * ((1 - (V[i+1,1]+273)/(647.1))/(1-0.577))^0.38
 
 
 # Función de solución
@@ -129,10 +131,7 @@ for i in range(1,n+1):
 for i in range(n+2,2*n):
         x0[i-1] = L[i,0]
     
-A = np.zeros[n,1]
-
-# Crear array con [x, fval, exitflag] = fsolve(@evaporator, x0, [] , L, V, n)
-    
+  
 # El resultado de la función de solución (corrientes de vapor y líquido) son puestos en las matrices
   
 for i in range(1,n+1):
@@ -147,7 +146,7 @@ for i in range(2,n+1):
         L[i+1,0] = L[i-2,1] - V[i-2,0]
         L[i+1,1] = (L[i-2,1]*L[i-2,1])/L[i+1,0]
     
-    
+A = []
 # Cálculo del calor y el área de transferencia de calor en cada efecto
 for i in range(1,n):
      Q[i-1] = V[i-1,3]*V[i-1,0]*(1/3600)
