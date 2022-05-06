@@ -1,4 +1,5 @@
 
+from defusedxml import DTDForbidden
 import numpy as np
 import math 
 
@@ -39,7 +40,7 @@ L[0,0]    = float(input('Corriente de alimentación (kg/h): '))
 L[0,1]    = float(input('Grados brix alimentación (m/m): ')) 
 L[n,1]  = float(input('Grados brix salida (m/m): '))
 L[0,2]    = float(input('Temperatura de alimentación (ºC): '))            
-#V[n,1]  = float(input('Temperatura de vapor condensado (ºC): '))
+V[n,1]  = float(input('Temperatura de vapor condensado (ºC): '))
 
 
 #Balance de masa inicial 
@@ -86,14 +87,17 @@ for i in range(1,n+1):
 print("El deltaT es ",DT)
 
 #Cálculo de temperaturas de cada efecto
-T1= Tsatn - DT[0]
 
+T1= Tsatn - DT[0]
+Lc = []
 for i in range(1,n+1):
     calTi = i - 1
     if calTi == 0:
         L[i,2]= T1 
     elif calTi != 0:
-        L[i,2] = L[i-1,2] + DT[i+1]
+        Lc = L[i-1,2]
+        L[i,2] = Lc[i+1] + DT[i+1]
+
 
 
 #for i in range(1,n+1):
@@ -105,7 +109,6 @@ for i in range(1,n+1):
 # Calor latente y entalpía
 
 for i in range(1,n+1):
-
     L[i-1,3] = (L[i-1,2]*(1549*L[i-1,1]+4176*(1-L[i-1,1]))+(((L[i-1,2])^2)/2)*(1.96*L[i-1,1]-0.0909*(1-L[i-1,1])) +((L[i-1,3]^3)/3)*(-0.00549*L[i-1,1]+0.00547*(1-L[i-1,1])))/1000; # kJ/kg
 
 #Capacidad calorifica del vapor
@@ -123,18 +126,29 @@ for i in range(1,n+1):
 
 
 # Función de solución
+
 x0 = np.zeros[2*n,1]
 
 for i in range(1,n+1):
         x0[i-1] = V[i,0]
-    
-    
+       
 for i in range(n+2,2*n):
         x0[i-1] = L[i,0]
     
-
 # El resultado de la función de solución (corrientes de vapor y líquido) son puestos en las matrices
-  
+
+n = 100
+sum = 0
+i = 1
+while i >= n:
+    sum = sum + i
+    i = i+1 
+    
+    if n == 2:
+        break
+    print(n)
+print('Loop ended.') 
+
 for i in range(1,n+1):
         V[i-1,0] = x0[i-1]
 
