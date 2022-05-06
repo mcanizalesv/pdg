@@ -96,8 +96,7 @@ for i in range(1,n+1):
         L[i,2]= T1 
     elif calTi != 0:
         Lc = L[i-1,2]
-        L[i,2] = Lc[i+1] + DT[i+1]
-
+        L[i,2] = Lc[i+1] + DT[i+1] #Aquí está el problema del llenado de las matrices
 
 
 #for i in range(1,n+1):
@@ -143,29 +142,23 @@ i = 1
 while i >= n:
     sum = sum + i
     i = i+1 
-    
-    if n == 2:
-        break
-    print(n)
-print('Loop ended.') 
-
-for i in range(1,n+1):
+    for i in range(1,n+1):
         V[i-1,0] = x0[i-1]
-
-    
-for i in range(n+1,2*n):
-        L[i-1,0] = x0[i-1]
-    
-
-for i in range(2,n+1):
-        L[i+1,0] = L[i-2,1] - V[i-2,0]
-        L[i+1,1] = (L[i-2,1]*L[i-2,1])/L[i+1,0]
-    
+    for i in range(n+1,2*n):
+            L[i-1,0] = x0[i-1]
+    for i in range(2,n+1):
+            L[i+1,0] = L[i-2,1] - V[i-2,0]
+            L[i+1,1] = (L[i-2,1]*L[i-2,1])/L[i+1,0]
+  
 A = []
-# Cálculo del calor y el área de transferencia de calor en cada efecto
+# Nuevo balance de masa y cálculo del calor y el área de transferencia de calor en cada efecto
+
+for i in range (3,n+1):
+    L[i,2] = L[i-1,2] - V[i,2]
+    L[i,3] = (L[i-1,2]*L[i-1,3])/L[i,2]
 for i in range(1,n):
-     Q[i-1] = V[i-1,3]*V[i-1,0]*(1/3600)
-     A[i-1] = 1000*Q[i-1]/((DT[i-1] - L[i,4])*U[i-1])
+    Q[i-1] = V[i-1,3]*V[i-1,0]*(1/3600)
+    A[i-1] = 1000*Q[i-1]/((DT[i-1] - L[i,4])*U[i-1])
 
 def G(x,L,V,n):
     pass
