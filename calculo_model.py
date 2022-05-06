@@ -87,11 +87,12 @@ print("El deltaT es ",DT)
 
 #Cálculo de temperaturas de cada efecto
 T1= Tsatn - DT[0]
-calTi = 0
-for i in range(0,n+1):
-    if i == 0:
+
+for i in range(1,n+1):
+    calTi = i - 1
+    if calTi == 0:
         L[i,2]= T1 
-    elif i != 0:
+    elif calTi != 0:
         L[i,2] = L[i-1,2] + DT[i+1]
 
 
@@ -131,7 +132,7 @@ for i in range(1,n+1):
 for i in range(n+2,2*n):
         x0[i-1] = L[i,0]
     
-  
+
 # El resultado de la función de solución (corrientes de vapor y líquido) son puestos en las matrices
   
 for i in range(1,n+1):
