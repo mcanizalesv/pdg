@@ -1,5 +1,4 @@
 
-from defusedxml import DTDForbidden
 import numpy as np
 import math 
 
@@ -40,7 +39,7 @@ L[0,0]    = float(input('Corriente de alimentación (kg/h): '))
 L[0,1]    = float(input('Grados brix alimentación (m/m): ')) 
 L[n,1]  = float(input('Grados brix salida (m/m): '))
 L[0,2]    = float(input('Temperatura de alimentación (ºC): '))            
-V[n,1]  = float(input('Temperatura de vapor condensado (ºC): '))
+#V[n,1]  = float(input('Temperatura de vapor condensado (ºC): '))
 
 
 #Balance de masa inicial 
@@ -75,28 +74,25 @@ def Tdif(a, b):
     return a - b 
 DeltaTneto = Tdif(Tst,Tsatn)
 DeltaTdisp = DeltaTneto + np.sum(BPE)
-print(DeltaTdisp)
 
 iU = 0
 DT = []
 for i in range(1,n+1):
     for i in range(1,n+1):
         iU = iU + (1/U[i-1])
-    cal1= (DeltaTdisp*(1/U[i-1])/iU) 
+    cal1= round(DeltaTdisp*(1/U[i-1])/iU,3) 
     DT.append((cal1))
-print("El deltaT es ",DT)
 
 #Cálculo de temperaturas de cada efecto
-
-T1= Tsatn - DT[0]
-Lc = []
+i=0
+T1= Tst - DT[0]
 for i in range(1,n+1):
-    calTi = i - 1
-    if calTi == 0:
+    if i == 1:
         L[i,2]= T1 
-    elif calTi != 0:
-        Lc = L[i-1,2]
-        L[i,2] = Lc[i+1] + DT[i+1] #Aquí está el problema del llenado de las matrices
+    elif i > 1:
+        L[i,2] = L[i-1,2] - DT[i-1] 
+i = i + 1
+
 
 
 #for i in range(1,n+1):
