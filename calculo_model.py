@@ -8,7 +8,7 @@ V   = np.zeros((n+1,5))
 L   = np.zeros((n+1,5))
 #DT  = np.zeros((1,n))  
 Q = np.zeros((1,n))   
-
+P = 100 # % de pureza de la solución agua - azúcar
 eleccion = input('¿Conoces la presión absoluta o manométrica del sistema? (m/a): ' )
 
 if eleccion == 'm': 
@@ -44,20 +44,15 @@ L[0,2]    = float(input('Temperatura de alimentación (ºC): '))
 
 #Balance de masa inicial 
 
-L[n,0] = (L[0,0]*L[0,1])/(L[n,1]) #Brix de salida
-print(L[n,0])
+L[n,0] = (L[0,0]*L[0,1])/(L[n,1]) #Flujo de salida
 Vt = (L[0,0] - L[n,0])/n
-print
 BPE=[]
 for i in range(1,n+1):
     L[i,0] = L[i-1,0] - Vt
     L[i,1] = (L[i-1,0]*L[i-1,1])/L[i,0]
     cal2 = round(2*(L[i,1]*100)/(100 - (L[i,1]*100)),2)
     BPE.append(cal2)
-print(BPE) 
-print(L[1,1])
-
-
+    
 #Cálculo de U  
 
 U = []
@@ -93,18 +88,13 @@ for i in range(1,n+1):
         L[i,2] = L[i-1,2] - DT[i-1] 
 i = i + 1
 
+# Entalpía corrientes de líquido concentrado
+i = 0
+for i in range(0,n+1):
+    L[i,3] = (1 - (0.6 - 0.0018*L[i,2])*(L[i,1]))*4.184*(L[i,2])
+i = i + 1
 
 
-#for i in range(1,n+1):
-    #V[i,4] = 1E2 * math.exp(At - (Bt/((V[i,1])+273+Ct)))
-    #L[i,4] = 0.8474E-2 * (L[i,1]*100)^0.9895 * math.exp(2.570E-2 * (L[i,1]*100))*4^0.1163
-    #L[i,2] = V[i,1] + L[i,4]
-
-
-# Calor latente y entalpía
-
-for i in range(1,n+1):
-    L[i-1,3] = (L[i-1,2]*(1549*L[i-1,1]+4176*(1-L[i-1,1]))+(((L[i-1,2])^2)/2)*(1.96*L[i-1,1]-0.0909*(1-L[i-1,1])) +((L[i-1,3]^3)/3)*(-0.00549*L[i-1,1]+0.00547*(1-L[i-1,1])))/1000; # kJ/kg
 
 #Capacidad calorifica del vapor
 Av = 3.47
@@ -112,7 +102,6 @@ Bv = 1.45E-3
 Dv = 0.121E5
 
 for i in range(1,n+1):
-
     V[i,2] = 2501.3 + 0.4618 * (Av*(V[i,1]) + (Bv/2)*((V[i,1]+273)^2-273^2) - Dv*((V[i,1]+273)^-1 - 273^-1 )); #kJ/kg    
 
 # Calor latente para la generación de vapor
