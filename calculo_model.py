@@ -5,7 +5,7 @@ import math
 
 
 n   = int(input('¿Cuantos efectos usará?: '))
-Tst = float(int(input('Ingresa la temperatura del vapor de calentamiento en °C: '))) #°C 
+Tst = float(input('Ingresa la temperatura del vapor de calentamiento en °C: ')) #°C 
 V   = np.zeros((n+1,5))
 L   = np.zeros((n+1,5))
 #DT  = np.zeros((1,n))  
@@ -89,7 +89,7 @@ for i in range(1,n+1):
         L[i,2]= T1 
     elif i > 1:
         L[i,2] = L[i-1,2] - DT[i-1] 
-i = i + 1
+i += 1
 
 #Cálculo de temperaturas de los condensados. Se supone que solo hay cambio de fase.
 
@@ -99,7 +99,7 @@ for i in range(0,n+1):
         V[i,1] = Tst
     elif i > 0:
         V[i,1] = L[i,2]
-i = i + 1
+i += 1
 
 # Entalpía corrientes de líquido concentrado
 i = 0
@@ -107,35 +107,49 @@ c = []
 for i in range(0,n+1):
     c.append(round((1 - (0.6 - 0.0018*L[i,2])*L[i,1])*4.184,3))
     L[i,3]=float(np.multiply(c[i],L[i,2]))
-i = i + 1
+i += 1
 
 #Entalpías de corrientes de vapor 
 
 
 #Capacidad calorifica del vapor
+
 Av = 3.47
 Bv = 1.45E-3
 Dv = 0.121E5
 
-for i in range(1,n+1):
-    V[i,2] = 2501.3 + 0.4618 * (Av*(V[i,1]) + (Bv/2)*((V[i,1]+273)^2-273^2) - Dv*((V[i,1]+273)^-1 - 273^-1 )); #kJ/kg    
+i=0
+for i in range(0,n+1):
+    if i == 0:
+        V[i,2] = 2501.3 + 0.4618 * (Av*(Tst+273) + (Bv/2)*((Tst+273)**2-273**2) - Dv*((Tst+273)**-1 - 273**-1 )); #kJ/kg    
+    elif i > 0:
+        V[i,2] = 2501.3 + 0.4618 * (Av*(V[i,1]+273) + (Bv/2)*((V[i,1]+273)**2-273**2) - Dv*((V[i,1]+273)**-1 - 273**-1 )); #kJ/kg  
+i += 1
 
 # Calor latente para la generación de vapor
-for i in range(1,n+1):
-    V[i+1,3] =  607-0.6*V[i,1]
+i=0
+for i in range(0,n+1):
+    if i == 0:
+        V[i,3] =  (607-0.6*Tst)*4.184 #kJ/kg
+    elif i > 0:
+        V[i,3] =  (607-0.6*V[i,1])*4.184
+i+=1 
 
 
+# Reasignación de flujos de vapor y corrientes concentradas
 
-# Función de solución
+x0 = np.zeros((2*n,1))
 
-x0 = np.zeros[2*n,1]
+x0 = np.zeros((2*n,1))
+i=0
+for i in range(0,2*n):
+    if i >= 0 and i<n:
+        x0[i] = V[i,0]
+    elif i >= n and i <= 2*n:
+        x0[i] = L[i-n+1,0]
+i += 1
 
-for i in range(1,n+1):
-        x0[i-1] = V[i,0]
-       
-for i in range(n+2,2*n):
-        x0[i-1] = L[i,0]
-    
+
 # El resultado de la función de solución (corrientes de vapor y líquido) son puestos en las matrices
 
 n = 100
