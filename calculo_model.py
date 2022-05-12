@@ -1,6 +1,8 @@
 
 import numpy as np
-import math 
+import math
+
+
 
 n   = int(input('¿Cuantos efectos usará?: '))
 Tst = float(int(input('Ingresa la temperatura del vapor de calentamiento en °C: '))) #°C 
@@ -79,6 +81,7 @@ for i in range(1,n+1):
     DT.append((cal1))
 
 #Cálculo de temperaturas de cada efecto
+
 i=0
 T1= Tst - DT[0]
 for i in range(1,n+1):
@@ -88,12 +91,25 @@ for i in range(1,n+1):
         L[i,2] = L[i-1,2] - DT[i-1] 
 i = i + 1
 
-# Entalpía corrientes de líquido concentrado
+#Cálculo de temperaturas de los condensados. Se supone que solo hay cambio de fase.
+
 i = 0
 for i in range(0,n+1):
-    L[i,3] = (1 - (0.6 - 0.0018*L[i,2])*(L[i,1]))*4.184*(L[i,2])
+    if i == 0:
+        V[i,1] = Tst
+    elif i > 0:
+        V[i,1] = L[i,2]
 i = i + 1
 
+# Entalpía corrientes de líquido concentrado
+i = 0
+c = []
+for i in range(0,n+1):
+    c.append(round((1 - (0.6 - 0.0018*L[i,2])*L[i,1])*4.184,3))
+    L[i,3]=float(np.multiply(c[i],L[i,2]))
+i = i + 1
+
+#Entalpías de corrientes de vapor 
 
 
 #Capacidad calorifica del vapor
@@ -106,7 +122,8 @@ for i in range(1,n+1):
 
 # Calor latente para la generación de vapor
 for i in range(1,n+1):
-    V[i+1,3] =  2257 * ((1 - (V[i+1,1]+273)/(647.1))/(1-0.577))^0.38
+    V[i+1,3] =  607-0.6*V[i,1]
+
 
 
 # Función de solución
