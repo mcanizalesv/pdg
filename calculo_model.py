@@ -1,14 +1,17 @@
 
 import numpy as np
 import math
-import scipy
+import scipy 
 
+
+# La matriz "L" recibe los flujos másicos, propiedades y composición másica de las corrientes concentradas, alimentación y producto final.
+# La matriz "V" recibe los flujos másicos, propiedades de las corrientes de vapor, vapor vivo y vapor final.
 
 n   = int(input('¿Cuantos efectos usará?: '))
 Tst = float(input('Ingresa la temperatura del vapor de calentamiento en °C: ')) #°C 
 V   = np.zeros((n+1,5))
 L   = np.zeros((n+1,5)) 
-Q = np.zeros((1,n))   
+Q = []   
 P = 100 # % de pureza de la solución agua - azúcar
 Tol = float(input('Ingrese el porcentaje de tolerancia de error: '))
 eleccion = input('¿Conoces la presión absoluta o manométrica del sistema? (m/a): ' )
@@ -25,7 +28,6 @@ elif eleccion == 'a':
 
 else: 
     pass
-
 
 #Parámetros de Antoine rango de temperatura de 0 a 200 °C y presión de kPa
 At = 16.3872
@@ -102,55 +104,68 @@ for i in range(0,n+1):
         V[i,1] = L[i,2]
 i += 1
 
-# Aquí empiezan las iteraciones 
+#Primera aproximación de los flujos de vapor 
 
-# Entalpía corrientes de líquido concentrado
-i = 0
-c = []
-for i in range(0,n+1):
-    c.append(round((1 - (0.6 - 0.0018*L[i,2])*L[i,1])*4.184,3))
-    L[i,3]=float(np.multiply(c[i],L[i,2]))
-i += 1
+k=0
+for k in range(0,n+1):
+    V[k,0]=Vt
+k+=1
+    
+A=[]
 
+count=1
+iter=0
 
-#Entalpías de corrientes de vapor 
-#Capacidad calorifica del vapor
+while (iter <= 100 or count>=Tol):
+    
+    DeltaTdisp = DeltaTneto + np.sum(BPE)
+    
+    # Entalpía corrientes de líquido concentrado
+    i = 0
+    c = []
+    for i in range(0,n+1):
+        c.append(round((1 - (0.6 - 0.0018*L[i,2])*L[i,1])*4.184,3))
+        L[i,3]=float(np.multiply(c[i],L[i,2]))
+    i += 1
 
-Av = 3.47
-Bv = 1.45E-3
-Dv = 0.121E5
+    #Entalpías de corrientes de vapor 
+    #Capacidad calorifica del vapor
 
-i = 0
-ite = 100
-while i <= ite:
+    Av = 3.47
+    Bv = 1.45E-3
+    Dv = 0.121E5
+
+    i = 0
+    ite = 100
 
     for i in range(0,n+1):
         if i == 0:
             V[i,2] = 2501.3 + 0.4618 * (Av*(Tst+273) + (Bv/2)*((Tst+273)**2-273**2) - Dv*((Tst+273)**-1 - 273**-1 )); #kJ/kg    
         elif i > 0:
             V[i,2] = 2501.3 + 0.4618 * (Av*(V[i,1]+273) + (Bv/2)*((V[i,1]+273)**2-273**2) - Dv*((V[i,1]+273)**-1 - 273**-1 )); #kJ/kg  
-    #i += 1
+    i += 1
 
     # Calor latente para la generación de vapor
-    #i=0
+    i=0
     for i in range(0,n+1):
         if i == 0:
             V[i,3] =  (607-0.6*Tst)*4.184 #kJ/kg
         elif i > 0:
             V[i,3] =  (607-0.6*V[i,1])*4.184
-    #i+=1 
+    i += 1
     
     # Reasignación de flujos de vapor y corrientes concentradas
-
-    x = np.zeros((2*n,1))
-    #i=0
-    for i in range(0,2*n):
-        if i >= 0 and i<n:
+    x = np.zeros((2*n+1,1))
+    i=0
+    for i in range(0,2*n+1):
+        if i >= 0 and i<=n:
             x[i] = V[i,0]
-        elif i >= n and i <= 2*n:
-            x[i] = L[i-n+1,0]
-    #i += 1
-
+        elif i > n and i <= (2*n + 1):
+            x[i] = L[i-n,0]
+    i += 1
+    
+    #Balances de materia y energía 
+    i = 0
     G = np.zeros((2*n,1))
     for i in range (0,n):
         if i == 0:
@@ -163,34 +178,35 @@ while i <= ite:
             G[2*i-2]= x[i+n]*L[i+1,4] + x[i+1]*V[i,2] - x[n+i]*L[i-1,3]- x[i]*V[i-1,3]
             G[2*i-1] = x[i] + x[i+n] - x[i+n]
     
-    
-    for i in range(1,n):
-        V[i-1,0] = G[i-1]
+    i = i + 1
+    k = 0 
+    for k in range(1,n):
+        V[k-1,0] = G[k-1]
     for i in range(n+1,2*n):
-        L[i-1,0] = G[i-1]
+        L[k-1,0] = G[k-1]
     for i in range(2,n+1):
-        L[i+1,0] = L[i-2,1] - V[i-2,0]
-        L[i+1,1] = (L[i-2,1]*L[i-2,1])/L[i+1,0]
-    i = i+1
-    
+        L[k+1,0] = L[k-2,1] - V[k-2,0]
+        L[k+1,1] = (L[k-2,1]*L[k-2,1])/L[k+1,0]
+    k = k+1
+        
     A = []
-    # Nuevo cálculo del calor y el área de transferencia de calor en cada efecto
+    # Cálculo del calor y el área de transferencia de calor en cada efecto
+    i=0
+    dif=[]
+    for i in range(0,n):
+        cal3 = V[i,3]*V[i,0]*(1/3600) #Estar atenta, porque no se ha llenado la columna cero de V
+        Q.append((cal3))
+        cal4 = 1000*Q[i-1]/((DT[i-1] - L[i,4])*U[i-1])
+        A.append((cal4))
+        cal5 = ((A[i] - A[i-1]))
+        dif.append((cal5))
+    i+=0
+    count = np.sum(dif)
+    iter= iter + 1
 
-    for i in range(1,n):
-        Q[i-1] = V[i-1,3]*V[i-1,0]*(1/3600)
-        A[i-1] = 1000*Q[i-1]/((DT[i-1] - L[i,4])*U[i-1])
+    
 
-def G(x,L,V,n):
-    pass
-    G = np.zeros[2*n,1]
-    for i in range (1,n):
-        if i == 1:
-            G[0] = x[n+2]*L[1,3] + x(2)*V[1,2] - L[0,0]*L[0,3] - x(1)*V[0,3]
-            G[1] = x(2) + x(n+2) - L[0,0]
-        elif (i == n):
-            G[2*n] = L[n,0]*L[n,3] + x[n]*V[n,2] - x(2*n)*L[n-1,3] - x(n)*V[n-1,3]
-            G[2*n-1] = L[n,0] + x[n] - x(2*n)
-        else:
-            G[2*i-2]= x(i+1+n)*L[i+1,4] + x(i+1)*V[i-1,2] - x(n+i)*L[i-1,3]- x(i)*V[i-1,3]
-            G[2*i-1] = x(i+1) + x(i+1+n) - x(i+n)
+    
 
+
+    
