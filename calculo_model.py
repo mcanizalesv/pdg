@@ -15,7 +15,7 @@ def askForInputs():
     # La matriz "L" recibe los flujos másicos, propiedades y composición másica de las corrientes concentradas, alimentación y producto final.
     # La matriz "V" recibe los flujos másicos, propiedades de las corrientes de vapor, vapor vivo y vapor final.
     n = 3 #int(input('¿Cuantos efectos usará?: '))
-    Tst = 121.054 #float(input('Ingresa la temperatura del vapor de calentamiento en °C: '))  # °C
+    Tst = 121 #float(input('Ingresa la temperatura del vapor de calentamiento en °C: '))  # °C
     V = np.zeros((n+1, 5))
     L = np.zeros((n+1, 5))
     Q = []
@@ -35,10 +35,10 @@ def askForInputs():
     else:
         pass
 
-    L[0, 0] = 100 #float(input('Corriente de alimentación (kg/h): ')) 
-    L[0, 1] = 0.1 #float(input('Grados brix alimentación (m/m): '))
-    L[n, 1] = 0.6 #float(input('Grados brix salida (m/m): '))
-    L[0, 2] = 26.7 #float(input('Temperatura de alimentación (ºC): '))
+    L[0, 0] = 22680 #float(input('Corriente de alimentación (kg/h): ')) 
+    L[0, 1] = 0.05 #float(input('Grados brix alimentación (m/m): '))
+    L[n, 1] = 0.25 #float(input('Grados brix salida (m/m): '))
+    L[0, 2] = 26.85 #float(input('Temperatura de alimentación (ºC): '))
 
     return [L,
             n,
@@ -60,7 +60,7 @@ def calculateTemperature(L, Tst, DT, n):
         if i == 1:
             L[i, 2] = T1
         elif i > 1:
-            L[i, 2] = L[i-1, 2] - DT[i-1]
+            L[i, 2] = L[i-1, 2] - DT[i-1] - BPE[i-1]
     i += 1
 
 def calculateCondensedTemperature(V, n, Tst, L):
@@ -86,7 +86,7 @@ def calculateBpe(L, Vt, n):
     for i in range(1, n+1):
         L[i, 0] = L[i-1, 0] - Vt
         L[i, 1] = (L[i-1, 0]*L[i-1, 1])/L[i, 0]
-        cal2 = round(2*(L[i, 1]*100)/(100 - (L[i, 1]*100)), 2)
+        cal2 = 1.78*L[i,1] + 6.22*(L[i, 1]**2)
         Bpe.append(cal2)
     return Bpe
 
@@ -134,14 +134,14 @@ L[n, 0] = (L[0, 0]*L[0, 1])/(L[n, 1])  # Flujo de salida
 Vt = round((L[0, 0] - L[n, 0])/n,2)
 
 BPE = calculateBpe(L, Vt, n)
-U = calculateU(n)
+U = [3.123,1.987,1.136]
 
 Tsatn = round(((Bt/(At - np.log(Pabsres))) + Ct),2)
 
 DeltaTneto = round(Tdif(Tst, Tsatn),2)
 DeltaTdisp = round(DeltaTneto - np.sum(BPE),2)
 
-DT = calculateDT(n,DeltaTdisp)
+DT = [15.9,18.94,33.1]
 
 calculateTemperature(L, Tst, DT, n)
 calculateCondensedTemperature(V, n, Tst, L)
@@ -149,13 +149,12 @@ calculateFirstProximity(V, Vt, n)
 
 k = 0
 A = []
-count = 1
 iter = 0
 
-while (iter <= 100 or count >= 0.1):
-
-    DeltaTdisp = round(DeltaTneto - np.sum(BPE),2)
+while iter <= 100 or cont > 0.35:
     
+    #Capacidad calorífica de los líquidos concentrados
+
     d1= -2.844669*10**-2
     d2= 4.211925
     d3= -1.017034*10**-3
@@ -264,13 +263,63 @@ while (iter <= 100 or count >= 0.1):
     #Cálculo de áreas de tansferencia y porcentaje de error
     
     for y in range(0,n):
-        cal7=(1000*Q[y])/(U[y]*(DT[y]-BPE[y]))
+        cal7=(Q[y])/(U[y]*(DT[y]))
         A.append(round(cal7,2)) # m^2
     
-    y=1
+    error_areas_array = np.zeros((n,1))
+    j=0
+    for j in range (0,n):
+        if j >= 0 and j < n-1:
+            error_areas_array[j]= abs((A[j] - A[j+1])/A[j+1])
+        elif j == n-1: 
+            error_areas_array[j]= abs((A[0] - A[j])/A[j])
+        j+=1
+
+    cont = np.sum(error_areas_array)
     
-    for k in range(2, n+1):
-        L[k+1, 0] = L[k-2, 1] - V[k-2, 0]
-        L[k+1, 1] = (L[k-2, 1]*L[k-2, 1])/L[k+1, 0]
+    if cont > (0.35):
         
-iter = iter + 1
+        #Cálculo de área promedio
+        A_prom=np.sum(A)/n
+
+        #Cálculo de nuevos DT 
+        
+        DT_nuevo=[]
+        
+        for i in range(0,n):
+            cal8= (DT[i]*A[i])/A_prom
+            DT_nuevo.append(cal8)
+        
+        #Nuevo cálculo de las corrientes de líquido concentrado
+        
+        for k in range(1, n+1):
+            L[k, 0] = L[k-1, 0] - V[k, 0]
+            L[k, 1] = (L[k-1, 0]*L[k-1, 1])/L[k, 0]
+        
+        for h in range (0,n):
+            DT[h]= DT_nuevo[h]
+        
+        calculateTemperature(L, Tst, DT, n)
+        calculateCondensedTemperature(V, n, Tst, L)
+        
+            
+    else:
+        iter=101 
+    
+    iter = iter + 1 
+
+    
+#Cálculo de la economía del sistema 
+suma_vap = 0 
+
+for u in range (1,n+1):
+    suma_vap=suma_vap + V[u,0]
+    
+Economy = (suma_vap/V[0,0]) #Economía del sistema      
+
+    
+print("La economía del sistema es ", Economy)    
+
+    
+# Cálculo del calor y el área de transferencia de calor en cada efecto
+i = 0
