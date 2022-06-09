@@ -134,24 +134,23 @@ L[n, 0] = (L[0, 0]*L[0, 1])/(L[n, 1])  # Flujo de salida
 Vt = round((L[0, 0] - L[n, 0])/n,2)
 
 BPE = calculateBpe(L, Vt, n)
-U = [3.123,1.987,1.136]
+U = calculateU(n)
 
 Tsatn = round(((Bt/(At - np.log(Pabsres))) + Ct),2)
 
 DeltaTneto = round(Tdif(Tst, Tsatn),2)
 DeltaTdisp = round(DeltaTneto - np.sum(BPE),2)
 
-DT = [15.9,18.94,33.1]
+DT= calculateDT(n, DeltaTdisp)
 
 calculateTemperature(L, Tst, DT, n)
 calculateCondensedTemperature(V, n, Tst, L)
 calculateFirstProximity(V, Vt, n)
 
 k = 0
-A = []
 iter = 0
-
-while iter <= 100 or cont > 0.35:
+count = False
+while not count:
     
     #Capacidad calorífica de los líquidos concentrados
 
@@ -236,12 +235,9 @@ while iter <= 100 or cont > 0.35:
         u=u+1
     
     result_vap= np.linalg.solve(G,ind)
-                             
-    i = i + 1
-    
+                            
     #Reasignación de flujos másicos de vapor 
-    
-    
+
     for k in range(0, n+1):
         V[k, 0] = result_vap[k]
     
@@ -259,11 +255,11 @@ while iter <= 100 or cont > 0.35:
     for j in range(0,n):
         cal6=round(V[j+1,3]*V[j,0]*(1/3600),2) 
         Q.append(round(cal6,2)) # kW
-
+        
     #Cálculo de áreas de tansferencia y porcentaje de error
-    
+    A = []
     for y in range(0,n):
-        cal7=(Q[y])/(U[y]*(DT[y]))
+        cal7=(Q[y])/(U[y]*DT[y])
         A.append(round(cal7,2)) # m^2
     
     error_areas_array = np.zeros((n,1))
@@ -275,41 +271,47 @@ while iter <= 100 or cont > 0.35:
             error_areas_array[j]= abs((A[0] - A[j])/A[j])
         j+=1
 
-    cont = np.sum(error_areas_array)
+    suma_error = np.sum(error_areas_array)
     
-    if cont > (0.35):
-        
-        #Cálculo de área promedio
-        A_prom=np.sum(A)/n
+    # Verificación de los porcentajes de error
+    if suma_error <= 0.3:
+        count = True 
+    
+    # En caso de ser falso, toma este camino para recalcular los balances, propiedades, etc, con los nuevos datos
+    # Cálculo de área promedio
+    A_prom=np.sum(A)/n
 
-        #Cálculo de nuevos DT 
-        
-        DT_nuevo=[]
-        
-        for i in range(0,n):
-            cal8= (DT[i]*A[i])/A_prom
-            DT_nuevo.append(cal8)
-        
-        #Nuevo cálculo de las corrientes de líquido concentrado
-        
-        for k in range(1, n+1):
-            L[k, 0] = L[k-1, 0] - V[k, 0]
-            L[k, 1] = (L[k-1, 0]*L[k-1, 1])/L[k, 0]
-        
-        for h in range (0,n):
-            DT[h]= DT_nuevo[h]
-        
-        calculateTemperature(L, Tst, DT, n)
-        calculateCondensedTemperature(V, n, Tst, L)
-        
-            
-    else:
-        iter=101 
+    # Cálculo de nuevos DT 
     
-    iter = iter + 1 
-
+    DT_nuevo=[]
     
-#Cálculo de la economía del sistema 
+    for i in range(0,n):
+        cal8= Q[i]/(A_prom*U[i])
+        DT_nuevo.append(round(cal8,2))
+        print(DT_nuevo[i])
+        
+    # Nuevo cálculo de las corrientes de líquido concentrado
+    
+    for k in range(1, n+1):
+        L[k, 0] = L[k-1, 0] - V[k, 0]
+        L[k, 1] = (L[k-1, 0]*L[k-1, 1])/L[k, 0]
+    
+    for h in range (0,n):
+        DT[h]= DT_nuevo[h]
+        
+    U = [3.123,1.987,1.136]
+    
+    calculateTemperature(L, Tst, DT, n)
+    calculateCondensedTemperature(V, n, Tst, L)
+    
+    iter+=1 
+     
+    if iter >= 100: 
+        count = True 
+        
+    print("Numero de iter: ,",iter)
+    
+# Cálculo de la economía del sistema 
 suma_vap = 0 
 
 for u in range (1,n+1):
@@ -318,7 +320,7 @@ for u in range (1,n+1):
 Economy = (suma_vap/V[0,0]) #Economía del sistema      
 
     
-print("La economía del sistema es ", Economy)    
+print("La economía del sistema es ", round(Economy,2))    
 
     
 # Cálculo del calor y el área de transferencia de calor en cada efecto
