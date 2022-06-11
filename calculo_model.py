@@ -35,10 +35,10 @@ def askForInputs():
     else:
         pass
 
-    L[0, 0] = 22680 #float(input('Corriente de alimentación (kg/h): ')) 
-    L[0, 1] = 0.05 #float(input('Grados brix alimentación (m/m): '))
-    L[n, 1] = 0.25 #float(input('Grados brix salida (m/m): '))
-    L[0, 2] = 26.85 #float(input('Temperatura de alimentación (ºC): '))
+    L[0, 0] = 100 #float(input('Corriente de alimentación (kg/h): ')) 
+    L[0, 1] = 0.1 #float(input('Grados brix alimentación (m/m): '))
+    L[n, 1] = 0.6 #float(input('Grados brix salida (m/m): '))
+    L[0, 2] = 26.7 #float(input('Temperatura de alimentación (ºC): '))
 
     return [L,
             n,
@@ -60,9 +60,17 @@ def calculateTemperature(L, Tst, DT, n):
         if i == 1:
             L[i, 2] = T1
         elif i > 1:
-            L[i, 2] = L[i-1, 2] - DT[i-1] - BPE[i-1]
+            L[i, 2] = L[i-1, 2] - DT[i-1] 
     i += 1
 
+def calculateTemperaturePure(Tst, DT, n):
+    T2 = Tst - DT[0]
+    Tpuros=[]
+    for i in range(0, n):
+        Temp_puros = L[i+1, 2] - BPE[i]
+        Tpuros.append(Temp_puros)
+    return Tpuros
+    
 def calculateCondensedTemperature(V, n, Tst, L):
     i = 0
     for i in range(0, n+1):
@@ -73,20 +81,13 @@ def calculateCondensedTemperature(V, n, Tst, L):
     i += 1
 
 
-def calculateFirstProximity(V, Vt, n):
-    k = 0
-    for k in range(0, n+1):
-        V[k, 0] = Vt
-    k += 1
-    return k
-
 
 def calculateBpe(L, Vt, n):
     Bpe = []
     for i in range(1, n+1):
         L[i, 0] = L[i-1, 0] - Vt
         L[i, 1] = (L[i-1, 0]*L[i-1, 1])/L[i, 0]
-        cal2 = 1.78*L[i,1] + 6.22*(L[i, 1]**2)
+        cal2 = round(2*(L[i, 1]*100)/(100 - (L[i, 1]*100)), 2) 
         Bpe.append(cal2)
     return Bpe
 
@@ -95,7 +96,7 @@ def calculateU(n):
     U = []
     k=0
     for k in range(1, n+1):
-        stp = (2500 - 1000)/n
+        stp = (1500)/n
         cal = ((2500 - (k-1)*stp))/1000  # kW//°C m^2
         U.append(cal)
     k=+1
@@ -144,8 +145,9 @@ DeltaTdisp = round(DeltaTneto - np.sum(BPE),2)
 DT= calculateDT(n, DeltaTdisp)
 
 calculateTemperature(L, Tst, DT, n)
+Tpuros = calculateTemperaturePure(Tst, DT, n)
 calculateCondensedTemperature(V, n, Tst, L)
-calculateFirstProximity(V, Vt, n)
+
 
 k = 0
 iter = 0
@@ -165,25 +167,30 @@ while not count:
 
     cont = []
     hLi = []
-    for i in range(0, n+1):
-        h= round(d1 + d2*L[i,2] + d3*L[i,2]**2 + d4*L[i,2]**3 + d5*L[i,2]**4 + d6*L[i,2]**5,2)
+        
+    L[0,3]= d1 + d2*L[0,2] + d3*L[0,2] + d4*L[0,2] + d5*L[0,2] + d6*L[0,2]
+    
+    for i in range(0, n):
+        h = (d1 + d2*Tpuros[i] + d3*Tpuros[i]**2 + d4*Tpuros[i]**3 + d5*Tpuros[i]**4 + d6*Tpuros[i]**5)
         hLi.append(h)
     
-    for i in range(0, n+1):
-        cont.append(round(hLi[i] + (((1 - ((0.6 - 0.0018*L[i, 2])*L[i,1]))*4.184)/1000), 3))
-        L[i, 3] = cont[i]
+    for i in range(0, n):
+        cont.append(hLi[i] + (((1 - ((0.6 - 0.0008*L[i, 2])*L[i,1]))*4.184))*BPE[i])
+        L[i+1, 3] = cont[i]
         
     #Entalpía de los condensados
     
     hci=[]
     i=0
-    for i in range(0, n+1):
-        cal2= round(d1 + d2*V[i,1] + d3*V[i,1]**2 + d4*V[i,1]**3 + d5*V[i,1]**4 + d6*V[i,1]**5,2)
-        hci.append(cal2)
-        L[i,4]= hci[i]
-        i += 1
-    
-
+    for i in range(0, n):
+        if i == 0:
+            L[i+1,4]= round(d1 + d2*Tst + d3*Tst**2 + d4*Tst**3 + d5*Tst**4 + d6*Tst**5,2)
+        else:
+            L[i+1,4]= round(d1 + d2*Tpuros[i] + d3*Tpuros[i]**2 + d4*Tpuros[i]**3 + d5*Tpuros[i]**4 + d6*Tpuros[i]**5,2)
+            #hci.append(cal2)
+            #L[i+1,4]= hci[i]
+        
+            
     # Entalpía específica de las corrientes de vapor saturado
     
     a=64.87678
@@ -192,7 +199,6 @@ while not count:
     d=6.29015
     e=-0.99893
     Tcr=647.096 #K
-    i = 0
     
     for i in range(0, n+1):
         if i == 0:
@@ -200,7 +206,6 @@ while not count:
             
         elif i > 0:
             V[i,2] = np.exp(math.sqrt(a+b*np.log(1/((V[i,1]+273.15)/Tcr))**0.35 + c/((V[i,1]+273.15)/Tcr)**2 + d/((V[i,1]+273.15)/Tcr)**3 + e/((V[i,1]+273.15)/Tcr)**4)) #kJ/kg
-    i += 1
 
     # Entalpía de vaporización para la generación de vapor
     
@@ -212,7 +217,7 @@ while not count:
     G = np.zeros((n+1, n+1))
     for i in range(0, n+1):
         if i == 1:
-            G[i,i-1] = (V[0,2]-L[1, 4]) 
+            G[i,i-1] = V[i,3] 
             G[i,i] = - V[1,2]
             
         elif (i == 0):
@@ -221,7 +226,7 @@ while not count:
             
         else:
             G[i,i] = -V[i,2]
-            G[i,i-1] = V[i-1,2] - L[i,4]
+            G[i,i-1] = V[i,3]
         i=+1
     
     ind = np.zeros((n+1,1))
@@ -261,6 +266,7 @@ while not count:
     for y in range(0,n):
         cal7=(Q[y])/(U[y]*DT[y])
         A.append(round(cal7,2)) # m^2
+        print("El área es, :",A[y])
     
     error_areas_array = np.zeros((n,1))
     j=0
@@ -299,7 +305,7 @@ while not count:
     for h in range (0,n):
         DT[h]= DT_nuevo[h]
         
-    U = [3.123,1.987,1.136]
+    U = calculateU(n)
     
     calculateTemperature(L, Tst, DT, n)
     calculateCondensedTemperature(V, n, Tst, L)
@@ -317,11 +323,20 @@ suma_vap = 0
 for u in range (1,n+1):
     suma_vap=suma_vap + V[u,0]
     
-Economy = (suma_vap/V[0,0]) #Economía del sistema      
+Economy = (suma_vap/V[0,0]) #Economía del sistema       
 
+for i in range (1,n+1):
+    print("Corriente L",i, "=", L[i,0])    
+    print("Corriente V",i, "=", V[i,0])
+    print("Fracción másica de azúcar en la corriente L",i, "=", L[i,0])
     
-print("La economía del sistema es ", round(Economy,2))    
 
+for i in range (0,n):
+    print("Coeficiente global de transferencia U",i+1, "=", U[i])
+    print("Área de transferencia en el efecto",i+1, "=", A[i])
     
-# Cálculo del calor y el área de transferencia de calor en cada efecto
-i = 0
+
+print("Temperatura de la corriente de vapor de salida en el efecto n",i, "=", V[n,1])
+print("Temperatura de la corriente de líquido de salida en el efecto n",i, "=", L[n,2])
+print("La economía del sistema es ", round(Economy,2))   
+ 
