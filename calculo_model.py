@@ -64,11 +64,10 @@ def calculateTemperature(L, Tst, DT, n):
     i += 1
 
 def calculateTemperaturePure(Tst, DT, n):
-    T2 = Tst - DT[0]
     Tpuros=[]
-    for i in range(0, n):
-        Temp_puros = L[i+1, 2] - BPE[i]
-        Tpuros.append(Temp_puros)
+    for i in range(1, n+1):
+        Temp_puros = L[i, 2] - BPE[i-1]
+        Tpuros.append(Temp_puros) 
     return Tpuros
     
 def calculateCondensedTemperature(V, n, Tst, L):
@@ -80,13 +79,18 @@ def calculateCondensedTemperature(V, n, Tst, L):
             V[i, 1] = L[i, 2]
     i += 1
 
-
-
 def calculateBpe(L, Vt, n):
     Bpe = []
     for i in range(1, n+1):
         L[i, 0] = L[i-1, 0] - Vt
         L[i, 1] = (L[i-1, 0]*L[i-1, 1])/L[i, 0]
+        cal2 = round(2*(L[i-1, 1]*100)/(100 - (L[i-1, 1]*100)), 2) 
+        Bpe.append(cal2)
+    return Bpe
+
+def calculateBpe_New(L,n):
+    Bpe = []
+    for i in range(0, n):
         cal2 = round(2*(L[i, 1]*100)/(100 - (L[i, 1]*100)), 2) 
         Bpe.append(cal2)
     return Bpe
@@ -304,11 +308,12 @@ while not count:
     
     for h in range (0,n):
         DT[h]= DT_nuevo[h]
-        
-    U = calculateU(n)
     
+    BPE = calculateBpe_New(L,n)  
+    U = calculateU(n)
     calculateTemperature(L, Tst, DT, n)
     calculateCondensedTemperature(V, n, Tst, L)
+    TpurosNew=calculateTemperaturePure(Tst, DT, n)
     
     iter+=1 
      
@@ -323,7 +328,7 @@ suma_vap = 0
 for u in range (1,n+1):
     suma_vap=suma_vap + V[u,0]
     
-Economy = (suma_vap/V[0,0]) #Economía del sistema       
+Economy = round((suma_vap/V[0,0]),2) #Economía del sistema       
 
 for i in range (1,n+1):
     print("Corriente L",i, "=", L[i,0])    
