@@ -1,5 +1,0 @@
-Si agrego un nuevo camio al archivo, sigo estos pasosd
-
-1.git add .\calculo_model.py
-2.git commit -m "Mensaje para el commit"
-3.git push
