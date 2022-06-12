@@ -14,7 +14,8 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(1197, 745)
+        MainWindow.resize(1239, 745)
+        MainWindow.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
         MainWindow.setTabShape(QtWidgets.QTabWidget.Rounded)
         self.contenedor = QtWidgets.QWidget(MainWindow)
         sizePolicy = QtWidgets.QSizePolicy(
@@ -36,362 +37,22 @@ class Ui_MainWindow(object):
         self.titulo.setStyleSheet("")
         self.titulo.setAlignment(QtCore.Qt.AlignCenter)
         self.titulo.setObjectName("titulo")
-        self.verticalLayoutWidget = QtWidgets.QWidget(self.contenedor)
-        self.verticalLayoutWidget.setGeometry(QtCore.QRect(40, 100, 531, 581))
-        self.verticalLayoutWidget.setObjectName("verticalLayoutWidget")
-        self.contenedor_inputs = QtWidgets.QVBoxLayout(
-            self.verticalLayoutWidget)
-        self.contenedor_inputs.setSizeConstraint(
-            QtWidgets.QLayout.SetNoConstraint)
-        self.contenedor_inputs.setContentsMargins(0, 0, 0, 0)
-        self.contenedor_inputs.setObjectName("contenedor_inputs")
-        self.contenedo_numero_efectos = QtWidgets.QHBoxLayout()
-        self.contenedo_numero_efectos.setSizeConstraint(
-            QtWidgets.QLayout.SetNoConstraint)
-        self.contenedo_numero_efectos.setContentsMargins(-1, -1, -1, 0)
-        self.contenedo_numero_efectos.setSpacing(10)
-        self.contenedo_numero_efectos.setObjectName("contenedo_numero_efectos")
-        self.label_numero_efecto = QtWidgets.QLabel(self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.label_numero_efecto.sizePolicy().hasHeightForWidth())
-        self.label_numero_efecto.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Fira Code SemiBold")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_numero_efecto.setFont(font)
-        self.label_numero_efecto.setObjectName("label_numero_efecto")
-        self.contenedo_numero_efectos.addWidget(self.label_numero_efecto)
-        self.input_numero_efectos = QtWidgets.QLineEdit(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.input_numero_efectos.sizePolicy().hasHeightForWidth())
-        self.input_numero_efectos.setSizePolicy(sizePolicy)
-        self.input_numero_efectos.setStyleSheet("border:1px solid black;\n"
-                                                "border-radius: 10px;height:40px")
-        self.input_numero_efectos.setInputMask("")
-        self.input_numero_efectos.setObjectName("input_numero_efectos")
-        self.contenedo_numero_efectos.addWidget(self.input_numero_efectos)
-        self.contenedor_inputs.addLayout(self.contenedo_numero_efectos)
-        self.contenedor_temperatura_vapor_saturado = QtWidgets.QHBoxLayout()
-        self.contenedor_temperatura_vapor_saturado.setSizeConstraint(
-            QtWidgets.QLayout.SetNoConstraint)
-        self.contenedor_temperatura_vapor_saturado.setContentsMargins(
-            -1, -1, -1, 0)
-        self.contenedor_temperatura_vapor_saturado.setSpacing(10)
-        self.contenedor_temperatura_vapor_saturado.setObjectName(
-            "contenedor_temperatura_vapor_saturado")
-        self.label_temperatura_vapor_saturado = QtWidgets.QLabel(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.label_temperatura_vapor_saturado.sizePolicy().hasHeightForWidth())
-        self.label_temperatura_vapor_saturado.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Fira Code SemiBold")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_temperatura_vapor_saturado.setFont(font)
-        self.label_temperatura_vapor_saturado.setAutoFillBackground(False)
-        self.label_temperatura_vapor_saturado.setWordWrap(True)
-        self.label_temperatura_vapor_saturado.setObjectName(
-            "label_temperatura_vapor_saturado")
-        self.contenedor_temperatura_vapor_saturado.addWidget(
-            self.label_temperatura_vapor_saturado)
-        self.input_temperatura_vapor_saturado = QtWidgets.QLineEdit(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.input_temperatura_vapor_saturado.sizePolicy().hasHeightForWidth())
-        self.input_temperatura_vapor_saturado.setSizePolicy(sizePolicy)
-        self.input_temperatura_vapor_saturado.setStyleSheet("border:1px solid black;\n"
-                                                            "border-radius: 10px;height:40px")
-        self.input_temperatura_vapor_saturado.setObjectName(
-            "input_temperatura_vapor_saturado")
-        self.contenedor_temperatura_vapor_saturado.addWidget(
-            self.input_temperatura_vapor_saturado)
-        self.contenedor_inputs.addLayout(
-            self.contenedor_temperatura_vapor_saturado)
-        self.contenedor_presion = QtWidgets.QHBoxLayout()
-        self.contenedor_presion.setSizeConstraint(
-            QtWidgets.QLayout.SetNoConstraint)
-        self.contenedor_presion.setContentsMargins(-1, -1, -1, 0)
-        self.contenedor_presion.setSpacing(10)
-        self.contenedor_presion.setObjectName("contenedor_presion")
-        self.label_tipo_presion = QtWidgets.QLabel(self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.label_tipo_presion.sizePolicy().hasHeightForWidth())
-        self.label_tipo_presion.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Fira Code SemiBold")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_tipo_presion.setFont(font)
-        self.label_tipo_presion.setObjectName("label_tipo_presion")
-        self.contenedor_presion.addWidget(self.label_tipo_presion)
-        self.selector_presion = QtWidgets.QComboBox(self.verticalLayoutWidget)
-        self.selector_presion.setStyleSheet("border:1px solid black;\n"
-                                            "border-radius: 10px;height:40px")
-        self.selector_presion.setObjectName("selector_presion")
-        self.contenedor_presion.addWidget(self.selector_presion)
-        self.contenedor_inputs.addLayout(self.contenedor_presion)
-        self.contenedor_presion_efect = QtWidgets.QHBoxLayout()
-        self.contenedor_presion_efect.setSizeConstraint(
-            QtWidgets.QLayout.SetNoConstraint)
-        self.contenedor_presion_efect.setContentsMargins(-1, -1, -1, 0)
-        self.contenedor_presion_efect.setSpacing(10)
-        self.contenedor_presion_efect.setObjectName("contenedor_presion_efect")
-        self.label_presion_efecto = QtWidgets.QLabel(self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.label_presion_efecto.sizePolicy().hasHeightForWidth())
-        self.label_presion_efecto.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Fira Code SemiBold")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_presion_efecto.setFont(font)
-        self.label_presion_efecto.setObjectName("label_presion_efecto")
-        self.contenedor_presion_efect.addWidget(self.label_presion_efecto)
-        self.input_presion_efecto = QtWidgets.QLineEdit(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.input_presion_efecto.sizePolicy().hasHeightForWidth())
-        self.input_presion_efecto.setSizePolicy(sizePolicy)
-        self.input_presion_efecto.setStyleSheet("border:1px solid black;\n"
-                                                "border-radius: 10px;height:40px")
-        self.input_presion_efecto.setObjectName("input_presion_efecto")
-        self.contenedor_presion_efect.addWidget(self.input_presion_efecto)
-        self.contenedor_inputs.addLayout(self.contenedor_presion_efect)
-        self.contenedor_flujo_alimentacion = QtWidgets.QHBoxLayout()
-        self.contenedor_flujo_alimentacion.setSizeConstraint(
-            QtWidgets.QLayout.SetNoConstraint)
-        self.contenedor_flujo_alimentacion.setContentsMargins(-1, -1, -1, 0)
-        self.contenedor_flujo_alimentacion.setSpacing(10)
-        self.contenedor_flujo_alimentacion.setObjectName(
-            "contenedor_flujo_alimentacion")
-        self.label_flujo_alimentacion = QtWidgets.QLabel(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.label_flujo_alimentacion.sizePolicy().hasHeightForWidth())
-        self.label_flujo_alimentacion.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Fira Code SemiBold")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_flujo_alimentacion.setFont(font)
-        self.label_flujo_alimentacion.setWordWrap(True)
-        self.label_flujo_alimentacion.setObjectName("label_flujo_alimentacion")
-        self.contenedor_flujo_alimentacion.addWidget(
-            self.label_flujo_alimentacion)
-        self.input_flujo_alimentacion = QtWidgets.QLineEdit(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.input_flujo_alimentacion.sizePolicy().hasHeightForWidth())
-        self.input_flujo_alimentacion.setSizePolicy(sizePolicy)
-        self.input_flujo_alimentacion.setStyleSheet("border:1px solid black;\n"
-                                                    "border-radius: 10px;height:40px")
-        self.input_flujo_alimentacion.setObjectName("input_flujo_alimentacion")
-        self.contenedor_flujo_alimentacion.addWidget(
-            self.input_flujo_alimentacion)
-        self.contenedor_inputs.addLayout(self.contenedor_flujo_alimentacion)
-        self.contenedor_fraccion_masica_alimentacion = QtWidgets.QHBoxLayout()
-        self.contenedor_fraccion_masica_alimentacion.setSizeConstraint(
-            QtWidgets.QLayout.SetNoConstraint)
-        self.contenedor_fraccion_masica_alimentacion.setContentsMargins(
-            -1, -1, -1, 0)
-        self.contenedor_fraccion_masica_alimentacion.setSpacing(10)
-        self.contenedor_fraccion_masica_alimentacion.setObjectName(
-            "contenedor_fraccion_masica_alimentacion")
-        self.label_fraccion_masica_alimentacion = QtWidgets.QLabel(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.label_fraccion_masica_alimentacion.sizePolicy().hasHeightForWidth())
-        self.label_fraccion_masica_alimentacion.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Fira Code SemiBold")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_fraccion_masica_alimentacion.setFont(font)
-        self.label_fraccion_masica_alimentacion.setWordWrap(True)
-        self.label_fraccion_masica_alimentacion.setObjectName(
-            "label_fraccion_masica_alimentacion")
-        self.contenedor_fraccion_masica_alimentacion.addWidget(
-            self.label_fraccion_masica_alimentacion)
-        self.input_fraccion_masica_alimentacion = QtWidgets.QLineEdit(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.input_fraccion_masica_alimentacion.sizePolicy().hasHeightForWidth())
-        self.input_fraccion_masica_alimentacion.setSizePolicy(sizePolicy)
-        self.input_fraccion_masica_alimentacion.setStyleSheet("border:1px solid black;\n"
-                                                              "border-radius: 10px;height:40px")
-        self.input_fraccion_masica_alimentacion.setObjectName(
-            "input_fraccion_masica_alimentacion")
-        self.contenedor_fraccion_masica_alimentacion.addWidget(
-            self.input_fraccion_masica_alimentacion)
-        self.contenedor_inputs.addLayout(
-            self.contenedor_fraccion_masica_alimentacion)
-        self.contenedor_fraccion_masica_producto = QtWidgets.QHBoxLayout()
-        self.contenedor_fraccion_masica_producto.setSizeConstraint(
-            QtWidgets.QLayout.SetNoConstraint)
-        self.contenedor_fraccion_masica_producto.setContentsMargins(
-            -1, -1, -1, 0)
-        self.contenedor_fraccion_masica_producto.setSpacing(10)
-        self.contenedor_fraccion_masica_producto.setObjectName(
-            "contenedor_fraccion_masica_producto")
-        self.label_fraccion_masica_producto = QtWidgets.QLabel(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.label_fraccion_masica_producto.sizePolicy().hasHeightForWidth())
-        self.label_fraccion_masica_producto.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Fira Code SemiBold")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_fraccion_masica_producto.setFont(font)
-        self.label_fraccion_masica_producto.setWordWrap(True)
-        self.label_fraccion_masica_producto.setObjectName(
-            "label_fraccion_masica_producto")
-        self.contenedor_fraccion_masica_producto.addWidget(
-            self.label_fraccion_masica_producto)
-        self.input_fraccion_masica_producto = QtWidgets.QLineEdit(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.input_fraccion_masica_producto.sizePolicy().hasHeightForWidth())
-        self.input_fraccion_masica_producto.setSizePolicy(sizePolicy)
-        self.input_fraccion_masica_producto.setStyleSheet("border:1px solid black;\n"
-                                                          "border-radius: 10px;height:40px")
-        self.input_fraccion_masica_producto.setObjectName(
-            "input_fraccion_masica_producto")
-        self.contenedor_fraccion_masica_producto.addWidget(
-            self.input_fraccion_masica_producto)
-        self.contenedor_inputs.addLayout(
-            self.contenedor_fraccion_masica_producto)
-        self.contenedor_temperatura_alimentacion = QtWidgets.QHBoxLayout()
-        self.contenedor_temperatura_alimentacion.setSizeConstraint(
-            QtWidgets.QLayout.SetMinAndMaxSize)
-        self.contenedor_temperatura_alimentacion.setContentsMargins(
-            -1, -1, -1, 0)
-        self.contenedor_temperatura_alimentacion.setSpacing(10)
-        self.contenedor_temperatura_alimentacion.setObjectName(
-            "contenedor_temperatura_alimentacion")
-        self.label_temperatura_alimentacion = QtWidgets.QLabel(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.label_temperatura_alimentacion.sizePolicy().hasHeightForWidth())
-        self.label_temperatura_alimentacion.setSizePolicy(sizePolicy)
-        font = QtGui.QFont()
-        font.setFamily("Fira Code SemiBold")
-        font.setPointSize(8)
-        font.setBold(True)
-        font.setItalic(False)
-        font.setWeight(75)
-        self.label_temperatura_alimentacion.setFont(font)
-        self.label_temperatura_alimentacion.setWordWrap(True)
-        self.label_temperatura_alimentacion.setObjectName(
-            "label_temperatura_alimentacion")
-        self.contenedor_temperatura_alimentacion.addWidget(
-            self.label_temperatura_alimentacion)
-        self.input_temperatura_alimentacion = QtWidgets.QLineEdit(
-            self.verticalLayoutWidget)
-        sizePolicy = QtWidgets.QSizePolicy(
-            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(
-            self.input_temperatura_alimentacion.sizePolicy().hasHeightForWidth())
-        self.input_temperatura_alimentacion.setSizePolicy(sizePolicy)
-        self.input_temperatura_alimentacion.setStyleSheet("border:1px solid black;\n"
-                                                          "border-radius: 10px;height:40px")
-        self.input_temperatura_alimentacion.setObjectName(
-            "input_temperatura_alimentacion")
-        self.contenedor_temperatura_alimentacion.addWidget(
-            self.input_temperatura_alimentacion)
-        self.contenedor_inputs.addLayout(
-            self.contenedor_temperatura_alimentacion)
         self.table_variantes = QtWidgets.QTableView(self.contenedor)
         self.table_variantes.setGeometry(QtCore.QRect(610, 160, 531, 171))
         self.table_variantes.setStyleSheet("")
         self.table_variantes.setObjectName("table_variantes")
         self.table_variantes.horizontalHeader().setVisible(True)
-        self.table_variantes.horizontalHeader().setCascadingSectionResizes(False)
+        self.table_variantes.horizontalHeader().setCascadingSectionResizes(True)
         self.table_variantes.horizontalHeader().setSortIndicatorShown(False)
         self.table_variantes.verticalHeader().setCascadingSectionResizes(False)
-        self.label = QtWidgets.QLabel(self.contenedor)
-        self.label.setGeometry(QtCore.QRect(610, 340, 531, 81))
+        self.economia_label = QtWidgets.QLabel(self.contenedor)
+        self.economia_label.setGeometry(QtCore.QRect(610, 340, 531, 81))
         font = QtGui.QFont()
         font.setPointSize(16)
-        self.label.setFont(font)
-        self.label.setStyleSheet(
+        self.economia_label.setFont(font)
+        self.economia_label.setStyleSheet(
             "border:2px solid black; background: white; border-radius:10px")
-        self.label.setObjectName("label")
+        self.economia_label.setObjectName("economia_label")
         self.line = QtWidgets.QFrame(self.contenedor)
         self.line.setGeometry(QtCore.QRect(590, 110, 16, 601))
         self.line.setLineWidth(3)
@@ -411,19 +72,296 @@ class Ui_MainWindow(object):
         self.titulo_2.setObjectName("titulo_2")
         self.calcular_button = QtWidgets.QPushButton(self.contenedor)
         self.calcular_button.setGeometry(QtCore.QRect(690, 650, 351, 71))
+        font = QtGui.QFont()
+        font.setFamily("Fira Code")
+        font.setPointSize(14)
+        font.setBold(True)
+        font.setWeight(75)
+        self.calcular_button.setFont(font)
+        self.calcular_button.setCursor(
+            QtGui.QCursor(QtCore.Qt.PointingHandCursor))
+        self.calcular_button.setStyleSheet(
+            "border:2px solid black; background: white; border-radius:10px")
         self.calcular_button.setObjectName("calcular_button")
+        self.flujo_vapor_entrada_label = QtWidgets.QLabel(self.contenedor)
+        self.flujo_vapor_entrada_label.setGeometry(
+            QtCore.QRect(610, 430, 531, 81))
+        font = QtGui.QFont()
+        font.setPointSize(16)
+        self.flujo_vapor_entrada_label.setFont(font)
+        self.flujo_vapor_entrada_label.setStyleSheet(
+            "border:2px solid black; background: white; border-radius:10px")
+        self.flujo_vapor_entrada_label.setObjectName(
+            "flujo_vapor_entrada_label")
+        self.input_numero_efectos = QtWidgets.QLineEdit(self.contenedor)
+        self.input_numero_efectos.setGeometry(QtCore.QRect(259, 120, 261, 42))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.input_numero_efectos.sizePolicy().hasHeightForWidth())
+        self.input_numero_efectos.setSizePolicy(sizePolicy)
+        self.input_numero_efectos.setStyleSheet("border:1px solid black;\n"
+                                                "border-radius: 10px;height:40px")
+        self.input_numero_efectos.setInputMask("")
+        self.input_numero_efectos.setObjectName("input_numero_efectos")
+        self.label_numero_efecto = QtWidgets.QLabel(self.contenedor)
+        self.label_numero_efecto.setGeometry(QtCore.QRect(20, 110, 221, 65))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_numero_efecto.sizePolicy().hasHeightForWidth())
+        self.label_numero_efecto.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Fira Code SemiBold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_numero_efecto.setFont(font)
+        self.label_numero_efecto.setObjectName("label_numero_efecto")
+        self.selector_presion = QtWidgets.QComboBox(self.contenedor)
+        self.selector_presion.setGeometry(QtCore.QRect(260, 230, 258, 42))
+        self.selector_presion.setStyleSheet("border:1px solid black;\n"
+                                            "border-radius: 10px;height:40px")
+        self.selector_presion.setObjectName("selector_presion")
+        self.label_tipo_presion = QtWidgets.QLabel(self.contenedor)
+        self.label_tipo_presion.setGeometry(QtCore.QRect(20, 250, 259, 13))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_tipo_presion.sizePolicy().hasHeightForWidth())
+        self.label_tipo_presion.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Fira Code SemiBold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_tipo_presion.setFont(font)
+        self.label_tipo_presion.setObjectName("label_tipo_presion")
+        self.input_presion_efecto = QtWidgets.QLineEdit(self.contenedor)
+        self.input_presion_efecto.setGeometry(QtCore.QRect(260, 280, 261, 42))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.input_presion_efecto.sizePolicy().hasHeightForWidth())
+        self.input_presion_efecto.setSizePolicy(sizePolicy)
+        self.input_presion_efecto.setStyleSheet("border:1px solid black;\n"
+                                                "border-radius: 10px;height:40px")
+        self.input_presion_efecto.setObjectName("input_presion_efecto")
+        self.label_presion_efecto = QtWidgets.QLabel(self.contenedor)
+        self.label_presion_efecto.setGeometry(QtCore.QRect(20, 280, 211, 51))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_presion_efecto.sizePolicy().hasHeightForWidth())
+        self.label_presion_efecto.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Fira Code SemiBold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_presion_efecto.setFont(font)
+        self.label_presion_efecto.setWordWrap(True)
+        self.label_presion_efecto.setObjectName("label_presion_efecto")
+        self.input_flujo_alimentacion = QtWidgets.QLineEdit(self.contenedor)
+        self.input_flujo_alimentacion.setGeometry(
+            QtCore.QRect(260, 330, 261, 42))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.input_flujo_alimentacion.sizePolicy().hasHeightForWidth())
+        self.input_flujo_alimentacion.setSizePolicy(sizePolicy)
+        self.input_flujo_alimentacion.setStyleSheet("border:1px solid black;\n"
+                                                    "border-radius: 10px;height:40px")
+        self.input_flujo_alimentacion.setObjectName("input_flujo_alimentacion")
+        self.label_flujo_alimentacion = QtWidgets.QLabel(self.contenedor)
+        self.label_flujo_alimentacion.setGeometry(
+            QtCore.QRect(20, 330, 191, 41))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_flujo_alimentacion.sizePolicy().hasHeightForWidth())
+        self.label_flujo_alimentacion.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Fira Code SemiBold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_flujo_alimentacion.setFont(font)
+        self.label_flujo_alimentacion.setWordWrap(True)
+        self.label_flujo_alimentacion.setObjectName("label_flujo_alimentacion")
+        self.input_fraccion_masica_alimentacion = QtWidgets.QLineEdit(
+            self.contenedor)
+        self.input_fraccion_masica_alimentacion.setGeometry(
+            QtCore.QRect(260, 390, 261, 42))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.input_fraccion_masica_alimentacion.sizePolicy().hasHeightForWidth())
+        self.input_fraccion_masica_alimentacion.setSizePolicy(sizePolicy)
+        self.input_fraccion_masica_alimentacion.setStyleSheet("border:1px solid black;\n"
+                                                              "border-radius: 10px;height:40px")
+        self.input_fraccion_masica_alimentacion.setObjectName(
+            "input_fraccion_masica_alimentacion")
+        self.label_fraccion_masica_alimentacion = QtWidgets.QLabel(
+            self.contenedor)
+        self.label_fraccion_masica_alimentacion.setGeometry(
+            QtCore.QRect(20, 390, 221, 31))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_fraccion_masica_alimentacion.sizePolicy().hasHeightForWidth())
+        self.label_fraccion_masica_alimentacion.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Fira Code SemiBold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_fraccion_masica_alimentacion.setFont(font)
+        self.label_fraccion_masica_alimentacion.setWordWrap(True)
+        self.label_fraccion_masica_alimentacion.setObjectName(
+            "label_fraccion_masica_alimentacion")
+        self.input_fraccion_masica_producto = QtWidgets.QLineEdit(
+            self.contenedor)
+        self.input_fraccion_masica_producto.setGeometry(
+            QtCore.QRect(260, 450, 258, 42))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.input_fraccion_masica_producto.sizePolicy().hasHeightForWidth())
+        self.input_fraccion_masica_producto.setSizePolicy(sizePolicy)
+        self.input_fraccion_masica_producto.setStyleSheet("border:1px solid black;\n"
+                                                          "border-radius: 10px;height:40px")
+        self.input_fraccion_masica_producto.setObjectName(
+            "input_fraccion_masica_producto")
+        self.label_fraccion_masica_producto = QtWidgets.QLabel(self.contenedor)
+        self.label_fraccion_masica_producto.setGeometry(
+            QtCore.QRect(20, 450, 201, 41))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Preferred, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_fraccion_masica_producto.sizePolicy().hasHeightForWidth())
+        self.label_fraccion_masica_producto.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Fira Code SemiBold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_fraccion_masica_producto.setFont(font)
+        self.label_fraccion_masica_producto.setWordWrap(True)
+        self.label_fraccion_masica_producto.setObjectName(
+            "label_fraccion_masica_producto")
+        self.input_temperatura_alimentacion = QtWidgets.QLineEdit(
+            self.contenedor)
+        self.input_temperatura_alimentacion.setGeometry(
+            QtCore.QRect(260, 510, 261, 41))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.input_temperatura_alimentacion.sizePolicy().hasHeightForWidth())
+        self.input_temperatura_alimentacion.setSizePolicy(sizePolicy)
+        self.input_temperatura_alimentacion.setStyleSheet("border:1px solid black;\n"
+                                                          "border-radius: 10px;height:40px")
+        self.input_temperatura_alimentacion.setObjectName(
+            "input_temperatura_alimentacion")
+        self.label_temperatura_alimentacion = QtWidgets.QLabel(self.contenedor)
+        self.label_temperatura_alimentacion.setGeometry(
+            QtCore.QRect(20, 500, 221, 51))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_temperatura_alimentacion.sizePolicy().hasHeightForWidth())
+        self.label_temperatura_alimentacion.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Fira Code SemiBold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_temperatura_alimentacion.setFont(font)
+        self.label_temperatura_alimentacion.setWordWrap(True)
+        self.label_temperatura_alimentacion.setObjectName(
+            "label_temperatura_alimentacion")
+        self.label_temperatura_vapor_saturado = QtWidgets.QLabel(
+            self.contenedor)
+        self.label_temperatura_vapor_saturado.setGeometry(
+            QtCore.QRect(20, 160, 221, 76))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Minimum)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.label_temperatura_vapor_saturado.sizePolicy().hasHeightForWidth())
+        self.label_temperatura_vapor_saturado.setSizePolicy(sizePolicy)
+        font = QtGui.QFont()
+        font.setFamily("Fira Code SemiBold")
+        font.setPointSize(10)
+        font.setBold(True)
+        font.setItalic(False)
+        font.setWeight(75)
+        self.label_temperatura_vapor_saturado.setFont(font)
+        self.label_temperatura_vapor_saturado.setAutoFillBackground(False)
+        self.label_temperatura_vapor_saturado.setWordWrap(True)
+        self.label_temperatura_vapor_saturado.setObjectName(
+            "label_temperatura_vapor_saturado")
+        self.input_temperatura_vapor_saturado = QtWidgets.QLineEdit(
+            self.contenedor)
+        self.input_temperatura_vapor_saturado.setGeometry(
+            QtCore.QRect(260, 180, 261, 42))
+        sizePolicy = QtWidgets.QSizePolicy(
+            QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(
+            self.input_temperatura_vapor_saturado.sizePolicy().hasHeightForWidth())
+        self.input_temperatura_vapor_saturado.setSizePolicy(sizePolicy)
+        self.input_temperatura_vapor_saturado.setStyleSheet("border:1px solid black;\n"
+                                                            "border-radius: 10px;height:40px")
+        self.input_temperatura_vapor_saturado.setObjectName(
+            "input_temperatura_vapor_saturado")
         MainWindow.setCentralWidget(self.contenedor)
         self.action12312 = QtWidgets.QAction(MainWindow)
         self.action12312.setObjectName("action12312")
         self.label_numero_efecto.setBuddy(self.input_numero_efectos)
-        self.label_temperatura_vapor_saturado.setBuddy(
-            self.input_temperatura_vapor_saturado)
         self.label_presion_efecto.setBuddy(self.input_presion_efecto)
         self.label_flujo_alimentacion.setBuddy(self.input_presion_efecto)
         self.label_fraccion_masica_alimentacion.setBuddy(
             self.input_presion_efecto)
         self.label_fraccion_masica_producto.setBuddy(self.input_presion_efecto)
         self.label_temperatura_alimentacion.setBuddy(self.input_presion_efecto)
+        self.label_temperatura_vapor_saturado.setBuddy(
+            self.input_temperatura_vapor_saturado)
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
@@ -433,37 +371,40 @@ class Ui_MainWindow(object):
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.titulo.setText(_translate(
             "MainWindow", "Evaluacion y  conceptual de evaporadores de multiple efecto"))
-        self.label_numero_efecto.setText(
-            _translate("MainWindow", "Numero de efectos (n)"))
-        self.selector_presion.currentText()
-        self.input_numero_efectos.setPlaceholderText(
-            _translate("MainWindow", "Introduce el valor"))
-        self.label_temperatura_vapor_saturado.setText(_translate(
-            "MainWindow", "Temperatura del vapor saturado (Tst)"))
-        self.input_temperatura_vapor_saturado.setPlaceholderText(
-            _translate("MainWindow", "Introduce el valor"))
-        self.label_tipo_presion.setText(_translate("MainWindow", "Presion"))
-        self.label_presion_efecto.setText(
-            _translate("MainWindow", "Presion del efecto n"))
-        self.input_presion_efecto.setPlaceholderText(
-            _translate("MainWindow", "Introduce el valor"))
-        self.label_flujo_alimentacion.setText(_translate(
-            "MainWindow", "Flujo de alimentacion (kg/h)"))
-        self.input_flujo_alimentacion.setPlaceholderText(
-            _translate("MainWindow", "Introduce el valor"))
-        self.label_fraccion_masica_alimentacion.setText(_translate(
-            "MainWindow", "Fraccion masica del soluto en la alimentacion"))
-        self.input_fraccion_masica_alimentacion.setPlaceholderText(
-            _translate("MainWindow", "Introduce el valor"))
-        self.label_fraccion_masica_producto.setText(_translate(
-            "MainWindow", "Fraccion masica del soluto en el producto"))
-        self.input_fraccion_masica_producto.setPlaceholderText(
-            _translate("MainWindow", "Introduce el valor"))
-        self.label_temperatura_alimentacion.setText(
-            _translate("MainWindow", "Temperatura de alimentacion(c)"))
-        self.input_temperatura_alimentacion.setPlaceholderText(
-            _translate("MainWindow", "Introduce el valor"))
-        self.label.setText(_translate("MainWindow", "Economía del sistema"))
+        self.economia_label.setText(_translate(
+            "MainWindow", "Economía del sistema :"))
         self.titulo_2.setText(_translate("MainWindow", "Solución agua-azúcar"))
         self.calcular_button.setText(_translate("MainWindow", "Calcular"))
+        self.flujo_vapor_entrada_label.setText(_translate(
+            "MainWindow", "Consumo de vapor saturado (kg/h) : "))
+        self.input_numero_efectos.setPlaceholderText(
+            _translate("MainWindow", "Introduce el valor"))
+        self.label_numero_efecto.setText(_translate(
+            "MainWindow", "Número de efectos (n):"))
+        self.label_tipo_presion.setText(
+            _translate("MainWindow", "Tipo de presión:"))
+        self.input_presion_efecto.setPlaceholderText(
+            _translate("MainWindow", "Introduce el valor"))
+        self.label_presion_efecto.setText(_translate(
+            "MainWindow", "Presión del último efecto (kPa):"))
+        self.input_flujo_alimentacion.setPlaceholderText(
+            _translate("MainWindow", "Introduce el valor"))
+        self.label_flujo_alimentacion.setText(_translate(
+            "MainWindow", "Flujo de alimentación (kg/h):"))
+        self.input_fraccion_masica_alimentacion.setPlaceholderText(
+            _translate("MainWindow", "Introduce el valor"))
+        self.label_fraccion_masica_alimentacion.setText(_translate(
+            "MainWindow", "Fracción másica del soluto en la alimentación:"))
+        self.input_fraccion_masica_producto.setPlaceholderText(
+            _translate("MainWindow", "Introduce el valor"))
+        self.label_fraccion_masica_producto.setText(_translate(
+            "MainWindow", "Fracción másica del soluto en el producto:"))
+        self.input_temperatura_alimentacion.setPlaceholderText(
+            _translate("MainWindow", "Introduce el valor"))
+        self.label_temperatura_alimentacion.setText(
+            _translate("MainWindow", "Temperatura de alimentación(c):"))
+        self.label_temperatura_vapor_saturado.setText(_translate(
+            "MainWindow", "Temperatura del vapor saturado (Tst):"))
+        self.input_temperatura_vapor_saturado.setPlaceholderText(
+            _translate("MainWindow", "Introduce el valor"))
         self.action12312.setText(_translate("MainWindow", "12312"))

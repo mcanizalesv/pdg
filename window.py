@@ -1,6 +1,7 @@
 import sys
 from PyQt5.QtWidgets import (
     QApplication, QMainWindow,
+    QHeaderView
 )
 import numpy as np
 import pandas as pd
@@ -16,25 +17,26 @@ class Window(QMainWindow, Ui_MainWindow):
         super().__init__(parent)
         self.setupUi(self)
         self.agregarOpcionesComboBox()
-        self.configurarTablaVariantes()
+        self.input_temperatura_alimentacion.setToolTip(
+            'This is a <b>QPushButton</b> widget')
+        self.input_temperatura_alimentacion.setToolTipDuration(3000)
+        self.calcular_button.clicked.connect(self.calculate)
+        self.table_variantes.horizontalHeader().setSectionResizeMode(
+            3)
 
-        # self.connectSignalsSlots()
+    def configurarTablaVariantes(self, data):
+        data = pd.DataFrame(data, columns=['Efecto #',
+                                           'Flujos de liquidos (kg/h)',
+                                           'Flujos de vapor (kg/h)',
+                                           'Fracciones masicas de solutos en los líquidos (m/n)',
+                                           'U (kW/°C*m^2)',
+                                           'Área de transferencia de calor',
+                                           'Temperatura (C)'
+                                           ]
+                            )
 
-    def configurarTablaVariantes(self):
-        data = pd.DataFrame([
-            ['Efecto 1', 0.12, 0.43, 0.65, 0.98, 0.5],
-            ['Efecto 2', 0.12, 0.43, 0.65, 0.98, 0.5],
-        ], columns=['',
-                    'Flujos de liquidos (kg/h)',
-                    'Flujos de vapor (kg/h)',
-                    'Fracciones masicas de solutos en los líquidos (m/n)',
-                    'U (kW/°C*m^2)',
-                    'Temperatura saturación (c)'
-                    ]
-        )
         model_tabla_variantes = TableModel(data)
         self.table_variantes.setModel(model_tabla_variantes)
-        self.calcular_button.clicked.connect(self.calculate)
 
     def calcularPabsres(self):
         eleccion = self.selector_presion.currentText()
@@ -64,7 +66,15 @@ class Window(QMainWindow, Ui_MainWindow):
             Pabsres
         ]
         print(inputs)
-        globalCalculate(inputs)
+        [values, consumo_vapor, economia_sistema] = globalCalculate(inputs)
+        print(values)
+        self.configurarTablaVariantes(values)
+        self.flujo_vapor_entrada_label.setText(
+            'Consumo de vapor saturado (kg/h) : ' + str(consumo_vapor)
+        )
+        self.economia_label.setText(
+            'Economía del sistema : ' + str(economia_sistema)
+        )
 
     def agregarOpcionesComboBox(self):
         self.selector_presion.addItem('Manométrica', 'm')
@@ -93,5 +103,6 @@ class Window(QMainWindow, Ui_MainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     win = Window()
+    win.setFixedSize(win.size())
     win.show()
     sys.exit(app.exec())
