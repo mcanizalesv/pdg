@@ -297,43 +297,43 @@ def globalCalculate(inputs):
                 error_areas_array[j] = abs((A[0] - A[j])/A[j])
             j += 1
 
-        for i in range(0, len(error_areas_array)):
-            if error_areas_array[i] > 0.10:
-                sum_areas=[]
-                for u in range (0,n):
-                    sum_areas.append(Q[i]/U[i])
+        mayor_10_porciento = any(ele > 0.10 for ele in error_areas_array)
+        if(mayor_10_porciento == True):           
+            sum_areas=[]
+            for u in range (0,n):
+                sum_areas.append(Q[u]/U[u])
+            
+            A_prom =  np.sum(sum_areas)/DeltaTdisp
+            # Cálculo de nuevos DT 
+            
+            DT_nuevo=[]
+            
+            for k in range(0,n):
+                cal8= Q[k]/(A_prom*U[k])
+                DT_nuevo.append(round(cal8,2))
+                print(DT_nuevo[k])
                 
-                A_prom =  np.sum(sum_areas)/DeltaTdisp
-                # Cálculo de nuevos DT 
-                
-                DT_nuevo=[]
-                
-                for i in range(0,n):
-                    cal8= Q[i]/(A_prom*U[i])
-                    DT_nuevo.append(round(cal8,2))
-                    print(DT_nuevo[i])
-                    
-                # Nuevo cálculo de las corrientes de líquido concentrado
-                
-                for k in range(1, n+1):
-                    L[k, 0] = L[k-1, 0] - V[k, 0]
-                    L[k, 1] = (L[k-1, 0]*L[k-1, 1])/L[k, 0]
-                
-                for h in range (0,n):
-                    DT[h]= DT_nuevo[h]
-                
-                BPE = calculateBpe_New(L,n)  
-                U = calculateU(n)
-                calculateTemperature(L, Tst, DT, n)
-                calculateCondensedTemperature(V, n, Tst, L)
-                Tpuros=calculateTemperaturePure(n, L, BPE)
+            # Nuevo cálculo de las corrientes de líquido concentrado
+            
+            for k in range(1, n+1):
+                L[k, 0] = L[k-1, 0] - V[k, 0]
+                L[k, 1] = (L[k-1, 0]*L[k-1, 1])/L[k, 0]
+            
+            for h in range (0,n):
+                DT[h]= DT_nuevo[h]
+            
+            BPE = calculateBpe_New(L,n)  
+            U = calculateU(n)
+            calculateTemperature(L, Tst, DT, n)
+            calculateCondensedTemperature(V, n, Tst, L)
+            Tpuros=calculateTemperaturePure(n, L, BPE)
+            iter+=1 
         else:
             count = True
-    
-    iter+=1 
-     
-    if iter >= 100: 
-        count = True 
+
+        if iter >= 100: 
+            count = True 
+
         
     print("Numero de iter: ,",iter)
 
